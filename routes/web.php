@@ -8,12 +8,11 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AssetMaintenanceController;
 use App\Http\Controllers\ReportController;
-
-
-
-
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\MaintenanceController; // <-- Import MaintenanceController
 
 /*
+
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -68,12 +67,14 @@ Route::post('/assets/{id}/update', [AssetController::class, 'update'])->name('as
 Route::get('/assets/{id}/delete', [AssetController::class, 'destroy'])->name('assets.destroy');
 
 // ---------- Asset Maintenance Routes ----------
-Route::get('/maintenance', [AssetMaintenanceController::class, 'index'])->name('maintenance.index');
-Route::get('/maintenance/create', [AssetMaintenanceController::class, 'create'])->name('maintenance.create');
-Route::post('/maintenance/store', [AssetMaintenanceController::class, 'store'])->name('maintenance.store');
-Route::get('/maintenance/{id}/edit', [AssetMaintenanceController::class, 'edit'])->name('maintenance.edit');
-Route::post('/maintenance/{id}/update', [AssetMaintenanceController::class, 'update'])->name('maintenance.update');
-Route::get('/maintenance/{id}/delete', [AssetMaintenanceController::class, 'destroy'])->name('maintenance.destroy');
+Route::controller(MaintenanceController::class)->group(function () {
+    Route::get('/maintenance', 'index')->name('maintenance.index');
+    Route::get('/maintenance/create', 'create')->name('maintenance.create');
+    Route::post('/maintenance', 'store')->name('maintenance.store');
+    Route::get('/maintenance/{id}/edit', 'edit')->name('maintenance.edit');
+    Route::put('/maintenance/{id}', 'update')->name('maintenance.update');
+    Route::delete('/maintenance/{id}', 'destroy')->name('maintenance.destroy');
+});
 
 // ---------- Report Routes ----------
 Route::get('/reports/inventory', [ReportController::class, 'inventory'])->name('reports.inventory');
@@ -81,6 +82,11 @@ Route::get('/reports/warranty', [ReportController::class, 'warrantyExpiring'])->
 Route::get('/reports/assigned', [ReportController::class, 'assignedAssets'])->name('reports.assigned');
 Route::get('/reports/maintenance-cost', [ReportController::class, 'maintenanceCost'])->name('reports.maintenance');
 Route::get('/reports/retired', [ReportController::class, 'retiredAssets'])->name('reports.retired');
+
+// ---------- API Routes for dynamic content ----------
+Route::get('/api/floors/{floor}/departments', [ApiController::class, 'getDepartmentsByFloor'])->name('api.floors.departments');
+
+// ---------- End of Routes ----------
 
 
 // Show registration form
