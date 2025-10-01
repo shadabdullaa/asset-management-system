@@ -96,6 +96,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Update Asset</button>
+        <a href="{{ route('assets.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection

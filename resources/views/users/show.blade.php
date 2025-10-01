@@ -42,6 +42,10 @@
                                     <b>Role</b> <a class="float-right">{{ ucfirst($user->role) }}</a>
                                 </li>
                             </ul>
+
+                            @if(Auth::user()->role == 'admin')
+                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-block"><b>Edit Profile</b></a>
+                            @endif
                         </div>
                         <!-- /.card-body -->
                     </div>

@@ -67,7 +67,7 @@
                <!-- Sidebar user panel (optional) -->
 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
     <div class="image">
-        <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('asset-management-system/dist/img/avatar.jpg') }}" 
+        <img id="sidebar-avatar" src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('asset-management-system/dist/img/avatar.jpg') }}" 
              class="img-circle elevation-2" 
              alt="{{ Auth::user()->name }}">
     </div>
@@ -88,7 +88,7 @@
         data-accordion="false">
         <!-- Dashboard Link -->
         <li class="nav-item">
-            <a href="{{ url('/') }}" class="nav-link">
+            <a href="{{ url('/') }}" class="nav-link {{ request()->is('dashboard') || request()->is('/') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                     Dashboard
@@ -97,8 +97,8 @@
         </li>
 
         <!-- Assets Menu Item -->
-        <li class="nav-item has-treeview menu-open">
-            <a href="{{ route('assets.index') }}" class="nav-link active">
+        <li class="nav-item">
+            <a href="{{ route('assets.index') }}" class="nav-link {{ request()->routeIs('assets.*') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-boxes"></i>
                 <p>
                     Assets
@@ -107,7 +107,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('categories.index') }}" class="nav-link">
+            <a href="{{ route('categories.index') }}" class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}">
                 <i class="nav-icon fa big-icon fa-tags"></i>
                 <p>
                     Categories
@@ -116,7 +116,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('floors.index') }}" class="nav-link">
+            <a href="{{ route('floors.index') }}" class="nav-link {{ request()->routeIs('floors.*') ? 'active' : '' }}">
                 <i class="nav-icon fa big-icon fa-building"></i>
                 <p>
                     Floors
@@ -125,7 +125,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('departments.index') }}" class="nav-link">
+            <a href="{{ route('departments.index') }}" class="nav-link {{ request()->routeIs('departments.*') ? 'active' : '' }}">
                 <i class="nav-icon fa big-icon fa-sitemap"></i>
                 <p>
                     Departments
@@ -134,7 +134,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('maintenance.index') }}" class="nav-link">
+            <a href="{{ route('maintenance.index') }}" class="nav-link {{ request()->routeIs('maintenance.*') ? 'active' : '' }}">
                 <i class="nav-icon fa big-icon fa-wrench"></i>
                 <p>
                     Maintenance
@@ -142,8 +142,19 @@
             </a>
         </li>
 
-        <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+        @if(Auth::user()->role == 'admin')
+        <li class="nav-item">
+            <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-users"></i>
+                <p>Users</p>
+            </a>
+        </li>
+        @endif
+
+       
+
+        <li class="nav-item has-treeview {{ request()->routeIs('reports.*') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}">
                 <i class="nav-icon fa big-icon fa-chart-bar"></i>
                 <p>
                     Reports
@@ -152,40 +163,46 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('reports.inventory') }}" class="nav-link">
+                    <a href="{{ route('reports.inventory') }}" class="nav-link {{ request()->routeIs('reports.inventory') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-warehouse"></i>
                         <p>Inventory</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('reports.assigned') }}" class="nav-link">
+                    <a href="{{ route('reports.assigned') }}" class="nav-link {{ request()->routeIs('reports.assigned') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-user-check"></i>
                         <p>Assigned Assets</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('reports.maintenance') }}" class="nav-link">
+                    <a href="{{ route('reports.maintenance') }}" class="nav-link {{ request()->routeIs('reports.maintenance') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-tools"></i>
 
                         <p>Maintenance Cost</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('reports.retired') }}" class="nav-link">
+                    <a href="{{ route('reports.retired') }}" class="nav-link {{ request()->routeIs('reports.retired') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-archive"></i>
 
                         <p>Retired Assets</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('reports.warranty') }}" class="nav-link">
+                    <a href="{{ route('reports.warranty') }}" class="nav-link {{ request()->routeIs('reports.warranty') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-shield-alt"></i>
                         <p>Warranty</p>
                     </a>
                 </li>
             </ul>
         </li>
-
+ <li class="nav-header">ACCOUNT</li>
+        <li class="nav-item">
+            <a href="{{ route('profile.edit') }}" class="nav-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-user-edit"></i>
+                <p>Edit My Profile</p>
+            </a>
+        </li>
         <li class="nav-item">
             <a href="{{ url('/logout') }}" class="nav-link">
                 <i class="nav-icon fas fa-power-off"></i>

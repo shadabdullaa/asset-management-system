@@ -38,14 +38,26 @@
         </thead>
         <tbody>
             @foreach($assets as $asset)
+            @php
+                $warrantyExpiry = \Carbon\Carbon::parse($asset->warranty_expiry);
+                $now = \Carbon\Carbon::now();
+                $isExpired = $warrantyExpiry->isPast();
+                $daysLeft = $now->diffInDays($warrantyExpiry, false);
+            @endphp
             <tr>
                 <td>{{ $asset->asset_name }}</td>
                 <td>{{ $asset->category->name }}</td>
                 <td>{{ $asset->department->department_name }}</td>
                 <td>{{ $asset->department->floor->floor_name ?? 'N/A' }}</td>
                 <td>{{ \Carbon\Carbon::parse($asset->purchase_date)->format('Y-m-d') }}</td>
-                <td>{{ \Carbon\Carbon::parse($asset->warranty_expiry)->format('Y-m-d') }}</td>
-                <td>{{ \Carbon\Carbon::parse($asset->warranty_expiry)->diffInDays(\Carbon\Carbon::now(), false) }}</td>
+                <td>{{ $warrantyExpiry->format('Y-m-d') }}</td>
+                <td>
+                    @if($isExpired)
+                        <span class="badge badge-danger">Expired</span>
+                    @else
+                        {{ $daysLeft }} days
+                    @endif
+                </td>
             </tr>
             @endforeach
         </tbody>

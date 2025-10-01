@@ -72,7 +72,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer justify-content-between">
-                                                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                                     <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Submit</button>
                                                 </div>
                                             </div>
