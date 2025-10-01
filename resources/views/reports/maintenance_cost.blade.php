@@ -1,8 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Maintenance Cost Report</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                    <li class="breadcrumb-item active">Maintenance Cost Report</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Content Header (Page header) -->
+
 <div class="container">
-    <h1>Maintenance Cost Report</h1>
     
     @include('reports.partials.filters', [
         'route' => route('reports.maintenance'),
@@ -11,23 +28,51 @@
         'categories' => $categories
     ])
 
+    <div class="row">
+        <div class="col-md-6">
+            <form action="{{ route('reports.maintenance') }}" method="GET">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Search by asset name..." value="{{ request('search') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6 text-right">
+            <button onclick="window.print();" class="btn btn-primary">Print Report</button>
+        </div>
+    </div>
+
     <table class="table table-bordered">
         <thead>
             <tr>
+                <th>Floor Name</th>
+                <th>Department Name</th>
                 <th>Asset Name</th>
-                <th>Department</th>
-                <th>Total Maintenance Cost</th>
+                <th>Asset Category</th>
+                <th>Model</th>
+                <th>Serial Number</th>
+                <th>Condition</th>
+                <th>Location</th>
+                <th>Maintenance Cost</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($costs as $cost)
-                @if($cost->asset)
+            @foreach($assets as $asset)
+                @foreach($asset->maintenances as $maintenance)
                 <tr>
-                    <td>{{ $cost->asset->asset_name }}</td>
-                    <td>{{ $cost->asset->department->department_name ?? 'N/A' }}</td>
-                    <td>{{ number_format($cost->total_cost, 2) }}</td>
+                    <td>{{ $asset->department->floor->floor_name ?? 'N/A' }}</td>
+                    <td>{{ $asset->department->department_name }}</td>
+                    <td>{{ $asset->asset_name }}</td>
+                    <td>{{ $asset->category->name }}</td>
+                    <td>{{ $asset->model }}</td>
+                    <td>{{ $asset->serial_number }}</td>
+                    <td>{{ ucfirst($asset->condition) }}</td>
+                    <td>{{ $asset->location }}</td>
+                    <td>{{ number_format($maintenance->cost, 2) }}</td>
                 </tr>
-                @endif
+                @endforeach
             @endforeach
         </tbody>
     </table>

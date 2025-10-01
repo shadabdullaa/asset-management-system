@@ -1,8 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Departments</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                    <li class="breadcrumb-item active">Departments</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Content Header (Page header) -->
+
 <div class="container">
-    <h1>Departments</h1>
     <a href="{{ route('departments.create') }}" class="btn btn-primary mb-3">Add New Department</a>
 
     @if(session('success'))

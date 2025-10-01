@@ -21,7 +21,7 @@ class Asset extends Model
         return $this->belongsTo(Department::class);
     }
 
-    public function maintenance()
+    public function maintenances()
     {
         return $this->hasMany(AssetMaintenance::class);
     }

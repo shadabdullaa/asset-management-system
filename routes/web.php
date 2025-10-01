@@ -10,6 +10,10 @@ use App\Http\Controllers\AssetMaintenanceController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\MaintenanceController; // <-- Import MaintenanceController
+use App\Models\Asset;
+use App\Models\Category;
+use App\Models\Department;
+use App\Models\Floor;
 
 /*
 
@@ -27,7 +31,12 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $totalAssets = Asset::count();
+    $totalCategories = Category::count();
+    $totalDepartments = Department::count();
+    $totalFloors = Floor::count();
+
+    return view('dashboard', compact('totalAssets', 'totalCategories', 'totalDepartments', 'totalFloors'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

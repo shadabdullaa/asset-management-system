@@ -23,11 +23,11 @@ class ReportController extends Controller
                 $q->where('floor_id', $request->floor_id);
             });
         }
-        
+
         if ($request->filled('department_id')) {
             $query->where('department_id', $request->department_id);
         }
-        
+
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
@@ -43,13 +43,13 @@ class ReportController extends Controller
                 $q->where('floor_id', $request->floor_id);
             });
         }
-        
+
         if ($request->filled('department_id')) {
             $query->whereHas('asset', function($q) use ($request) {
                 $q->where('department_id', $request->department_id);
             });
         }
-        
+
         if ($request->filled('category_id')) {
             $query->whereHas('asset', function($q) use ($request) {
                 $q->where('category_id', $request->category_id);
@@ -65,7 +65,7 @@ class ReportController extends Controller
         if ($request->filled('from_date')) {
             $query->where($dateColumn, '>=', $request->from_date);
         }
-        
+
         if ($request->filled('to_date')) {
             $query->where($dateColumn, '<=', $request->to_date);
         }
@@ -75,15 +75,15 @@ class ReportController extends Controller
     public function inventory(Request $request)
     {
         $query = Asset::with(['department.floor', 'category']);
-        
+
         $this->applyAssetBaseFilters($query, $request);
         $this->applyDateFilters($query, $request, 'purchase_date');
-        
+
         $assets = $query->get();
         $floors = Floor::all();
         $departments = Department::all();
         $categories = Category::all();
-        
+
         return view('reports.inventory', compact('assets', 'floors', 'departments', 'categories'));
     }
 
@@ -91,66 +91,84 @@ class ReportController extends Controller
     public function warrantyExpiring(Request $request)
     {
         $query = Asset::with(['department', 'category']);
-        
+
         $this->applyAssetBaseFilters($query, $request);
         $this->applyDateFilters($query, $request, 'warranty_expiry');
-        
+
         $assets = $query->get();
         $floors = Floor::all();
         $departments = Department::all();
         $categories = Category::all();
-        
+
         return view('reports.warranty', compact('assets', 'floors', 'departments', 'categories'));
     }
 
     // 3. Assets currently assigned to each person/department
     public function assignedAssets(Request $request)
     {
-        $query = Asset::with(['department.floor', 'category'])->whereNotNull('assigned_to');
-        
+        $query = Asset::with(['department.floor', 'category'])
+            ->whereNotNull('with_whom');
+
+        // Apply common filters
         $this->applyAssetBaseFilters($query, $request);
-        $this->applyDateFilters($query, $request, 'assignment_date');
-        
+
+        // Search by asset_name or serial_number
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('asset_name', 'like', "%{$search}%")
+                  ->orWhere('serial_number', 'like', "%{$search}%");
+            });
+        }
+
         $assets = $query->get();
         $floors = Floor::all();
         $departments = Department::all();
         $categories = Category::all();
-        
+
         return view('reports.assigned', compact('assets', 'floors', 'departments', 'categories'));
     }
 
     // 4. Maintenance cost report per asset/department
     public function maintenanceCost(Request $request)
     {
-        $query = AssetMaintenance::with(['asset.department.floor', 'asset.category']);
-        
-        $this->applyMaintenanceBaseFilters($query, $request);
-        $this->applyDateFilters($query, $request, 'maintenance_date');
-        
-        $costs = $query->selectRaw('asset_id, SUM(cost) as total_cost')
-                       ->groupBy('asset_id')
-                       ->get();
-        
+        $query = Asset::with(['department.floor', 'category', 'maintenances' => function ($query) use ($request) {
+            if ($request->filled('from_date')) {
+                $query->where('maintenance_date', '>=', $request->from_date);
+            }
+            if ($request->filled('to_date')) {
+                $query->where('maintenance_date', '<=', $request->to_date);
+            }
+        }]);
+
+        $this->applyAssetBaseFilters($query, $request);
+
+        $query->whereHas('maintenances', function ($q) use ($request) {
+            $this->applyDateFilters($q, $request, 'maintenance_date');
+        });
+
+        $assets = $query->get();
         $floors = Floor::all();
         $departments = Department::all();
         $categories = Category::all();
-        
-        return view('reports.maintenance_cost', compact('costs', 'floors', 'departments', 'categories'));
+
+        return view('reports.maintenance_cost', compact('assets', 'floors', 'departments', 'categories'));
     }
 
     // 5. Retired assets list
     public function retiredAssets(Request $request)
     {
-        $query = Asset::with(['department.floor', 'category'])->where('status', 'retired');
-        
+        $query = Asset::with(['department.floor', 'category'])
+            ->where('status', 'retired');
+
         $this->applyAssetBaseFilters($query, $request);
         $this->applyDateFilters($query, $request, 'retirement_date');
-        
+
         $assets = $query->get();
         $floors = Floor::all();
         $departments = Department::all();
         $categories = Category::all();
-        
+
         return view('reports.retired', compact('assets', 'floors', 'departments', 'categories'));
     }
 }
