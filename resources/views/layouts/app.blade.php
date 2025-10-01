@@ -64,18 +64,22 @@
             <!-- Sidebar -->
             <div class="sidebar">
 
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="{{ asset('asset-management-system/dist/img/avatar.jpg') }}" class="img-circle elevation-2" alt="User Image">
-                    </div>
-                    <div class="info">
-                        <a href="#" class="d-block">SoftEngineer Jay</a>
-                    </div>
-                    <!-- End Sidebar user panel (optional) -->
+               <!-- Sidebar user panel (optional) -->
+<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+    <div class="image">
+        <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('asset-management-system/dist/img/avatar.jpg') }}" 
+             class="img-circle elevation-2" 
+             alt="{{ Auth::user()->name }}">
+    </div>
+    <div class="info">
+        <a href="{{ route('users.show', Auth::user()->id) }}" class="d-block">
+            {{ Auth::user()->name }}
+        </a>
+    </div>
+</div>
+<!-- end sidebar -->
 
-                </div>
-                <!-- end sidebar -->
+
 
 
                 <!-- Start Sidebar Menu -->
@@ -85,7 +89,7 @@
         <!-- Dashboard Link -->
         <li class="nav-item">
             <a href="{{ url('/') }}" class="nav-link">
-                <i class="nav-icon fas fa-home"></i>
+                <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                     Dashboard
                 </p>
@@ -95,7 +99,7 @@
         <!-- Assets Menu Item -->
         <li class="nav-item has-treeview menu-open">
             <a href="{{ route('assets.index') }}" class="nav-link active">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <i class="nav-icon fa fa-boxes"></i>
                 <p>
                     Assets
                 </p>
@@ -104,7 +108,7 @@
 
         <li class="nav-item">
             <a href="{{ route('categories.index') }}" class="nav-link">
-                <i class="nav-icon fa big-icon fa-file"></i>
+                <i class="nav-icon fa big-icon fa-tags"></i>
                 <p>
                     Categories
                 </p>
@@ -122,7 +126,7 @@
 
         <li class="nav-item">
             <a href="{{ route('departments.index') }}" class="nav-link">
-                <i class="nav-icon fa big-icon fa-university"></i>
+                <i class="nav-icon fa big-icon fa-sitemap"></i>
                 <p>
                     Departments
                 </p>
@@ -131,7 +135,7 @@
 
         <li class="nav-item">
             <a href="{{ route('maintenance.index') }}" class="nav-link">
-                <i class="nav-icon fa big-icon fa-cogs"></i>
+                <i class="nav-icon fa big-icon fa-wrench"></i>
                 <p>
                     Maintenance
                 </p>
@@ -140,7 +144,7 @@
 
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-                <i class="nav-icon fa big-icon fa-file-alt"></i>
+                <i class="nav-icon fa big-icon fa-chart-bar"></i>
                 <p>
                     Reports
                     <i class="right fas fa-angle-left"></i>
@@ -149,31 +153,33 @@
             <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="{{ route('reports.inventory') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="nav-icon fa fa-warehouse"></i>
                         <p>Inventory</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('reports.assigned') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="nav-icon fa fa-user-check"></i>
                         <p>Assigned Assets</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('reports.maintenance') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="nav-icon fa fa-tools"></i>
+
                         <p>Maintenance Cost</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('reports.retired') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="nav-icon fa fa-archive"></i>
+
                         <p>Retired Assets</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('reports.warranty') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="nav-icon fa fa-shield-alt"></i>
                         <p>Warranty</p>
                     </a>
                 </li>

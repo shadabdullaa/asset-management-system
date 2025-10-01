@@ -1,28 +1,53 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('User Profile') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="flex items-center">
-                        @if ($user->profile_picture)
-                            <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" class="rounded-full h-20 w-20 object-cover">
-                        @else
-                            <img src="{{ asset('asset-management-system/dist/img/avatar.jpg') }}" alt="Default Profile Picture" class="rounded-full h-20 w-20 object-cover">
-                        @endif
-                        <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900">{{ $user->name }}</h3>
-                            <div class="text-sm text-gray-500">{{ $user->email }}</div>
-                            <div class="text-sm text-gray-500">{{ $user->role }}</div>
+@section('content')
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>User Profile</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                        <li class="breadcrumb-item active">User Profile</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Profile Image -->
+                    <div class="card card-primary card-outline">
+                        <div class="card-body box-profile">
+                            <div class="text-center">
+                                <img class="profile-user-img img-fluid img-circle"
+                                     src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('asset-management-system/dist/img/avatar.jpg') }}"
+                                     alt="User profile picture">
+                            </div>
+
+                            <h3 class="profile-username text-center">{{ $user->name }}</h3>
+
+                            <ul class="list-group list-group-unbordered mb-3">
+                                <li class="list-group-item">
+                                    <b>Email</b> <a class="float-right">{{ $user->email }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Role</b> <a class="float-right">{{ ucfirst($user->role) }}</a>
+                                </li>
+                            </ul>
                         </div>
+                        <!-- /.card-body -->
                     </div>
+                    <!-- /.card -->
                 </div>
             </div>
         </div>
-    </div>
-</x-app-layout>
+    </section>
+@endsection
