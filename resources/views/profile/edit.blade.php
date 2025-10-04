@@ -1,35 +1,60 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-avatar-form')
-                </div>
+@section('content')
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Profile</h1>
             </div>
-
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                    <li class="breadcrumb-item active">User Profile</li>
+                </ol>
             </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                {{-- We need to manually convert the TailwindCSS partials to Bootstrap/AdminLTE style --}}
+                {{-- For now, let's just include them to show the structure --}}
+
+                {{-- Update Profile Picture --}}
+                <div class="card card-primary card-outline">
+                    <div class="card-body">
+                        @include('profile.partials.update-avatar-form')
+                    </div>
                 </div>
-            </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
+                {{-- Update Profile Information --}}
+                <div class="card card-primary">
+                    <div class="card-body">
+                        @include('profile.partials.update-profile-information-form')
+                    </div>
+                </div>
+
+                {{-- Update Password --}}
+                <div class="card card-primary">
+                    <div class="card-body">
+                        @include('profile.partials.update-password-form')
+                    </div>
+                </div>
+
+                {{-- Delete Account --}}
+                <div class="card card-danger">
+                    <div class="card-body">
+                        @include('profile.partials.delete-user-form')
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+</section>
+@endsection

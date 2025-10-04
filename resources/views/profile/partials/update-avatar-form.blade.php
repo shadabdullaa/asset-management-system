@@ -9,24 +9,18 @@
         </p>
     </header>
 
-    @if (session('success'))
-        <div class="mt-2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-            {{ session('success') }}
+    @if (session('status') === 'avatar-updated')
+        <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="mt-2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <p>{{ __('Profile picture updated successfully.') }}</p>
         </div>
     @endif
-
-    @error('avatar')
-        <div class="mt-2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            {{ $message }}
-        </div>
-    @enderror
 
     <form method="post" action="{{ route('profile.avatar.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
 
         <div class="flex items-center space-x-6">
             <div class="shrink-0">
-                <img id="avatar-preview" class="h-24 w-24 object-cover rounded-full" 
+                <img id="avatar-preview" class="h-24 w-24 object-cover rounded-full"
                      src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('asset-management-system/dist/img/avatar.jpg') }}" 
                      alt="Current profile photo" />
             </div>
@@ -40,6 +34,7 @@
                     hover:file:bg-violet-100
                 "/>
             </label>
+            <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
         </div>
 
         <div class="flex items-center gap-4">
