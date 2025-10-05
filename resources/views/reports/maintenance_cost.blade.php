@@ -20,7 +20,6 @@
 <!-- End Content Header (Page header) -->
 
 <div class="container">
-    
     @include('reports.partials.filters', [
         'route' => route('reports.maintenance'),
         'floors' => $floors,
@@ -28,7 +27,7 @@
         'categories' => $categories
     ])
 
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-6">
             <form action="{{ route('reports.maintenance') }}" method="GET">
                 <div class="input-group">
@@ -44,8 +43,8 @@
         </div>
     </div>
 
-    <table class="table table-bordered">
-        <thead>
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-primary">
             <tr>
                 <th>Floor Name</th>
                 <th>Department Name</th>
@@ -58,7 +57,7 @@
                 <th>Maintenance Cost</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-light">
             @foreach($assets as $asset)
                 @foreach($asset->maintenances as $maintenance)
                 <tr>

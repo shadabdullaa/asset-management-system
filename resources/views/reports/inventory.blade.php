@@ -27,8 +27,24 @@
         'categories' => $categories
     ])
 
-    <table class="table table-bordered">
-        <thead>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <form action="{{ route('reports.inventory') }}" method="GET">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Search by asset name..." value="{{ request('search') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6 text-right">
+            <button onclick="window.print();" class="btn btn-primary">Print Report</button>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-primary">
             <tr>
                 <th>Asset Name</th>
                 <th>Department</th>
@@ -37,7 +53,7 @@
                 <th>Condition</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-light">
             @foreach($assets as $asset)
             <tr>
                 <td>{{ $asset->asset_name }}</td>

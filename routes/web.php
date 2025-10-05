@@ -9,7 +9,7 @@ use App\Http\Controllers\AssetMaintenanceController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\MaintenanceController;
-use App\Http\Controllers\UserController; // <-- Added UserController
+use App\Http\Controllers\UserController;
 use App\Models\Asset;
 use App\Models\Category;
 use App\Models\Department;
@@ -40,16 +40,15 @@ Route::middleware('auth')->group(function () {
     // ---------- User Profile Routes ----------
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    Route::put('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
 
     // ---------- User Management Routes (Admin) ----------
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/users/{user}', [UserController::class, 'show'])
-        ->name('users.show');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
-
 
     // ---------- Floor Routes ----------
     Route::get('/floors', [FloorController::class, 'index'])->name('floors.index');
@@ -128,4 +127,3 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-    

@@ -1,6 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
+    <style>
+        .img-circle {
+            border-radius: 50% !important;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 3px solid #adb5bd; /* optional subtle border */
+        }
+
+        @media (max-width: 576px) {
+            .img-circle {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
@@ -44,7 +61,9 @@
                             </ul>
 
                             @if(Auth::user()->role == 'admin')
-                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-block"><b>Edit Profile</b></a>
+                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-block">
+                                    <b>Edit Profile</b>
+                                </a>
                             @endif
                         </div>
                         <!-- /.card-body -->

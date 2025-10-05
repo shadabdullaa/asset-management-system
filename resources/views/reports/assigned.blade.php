@@ -28,7 +28,7 @@
         'categories' => $categories
     ])
 
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-6">
             <form action="{{ route('reports.assigned') }}" method="GET">
                 <div class="input-group">
@@ -44,8 +44,8 @@
         </div>
     </div>
 
-    <table class="table table-bordered">
-        <thead>
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-primary">
             <tr>
                 <th>Floor Name</th>
                 <th>Department Name</th>
@@ -58,7 +58,7 @@
                 <th>Assigned To</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-light">
             @foreach($assets as $asset)
             <tr>
                 <td>{{ $asset->department->floor->floor_name ?? 'N/A' }}</td>
@@ -75,5 +75,4 @@
         </tbody>
     </table>
 </div>
-
 @endsection

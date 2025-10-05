@@ -24,8 +24,24 @@
 
     @include('reports.partials.filters', ['route' => route('reports.warranty')])
 
-    <table class="table table-bordered">
-        <thead>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <form action="{{ route('reports.warranty') }}" method="GET">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Search by asset name..." value="{{ request('search') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6 text-right">
+            <button onclick="window.print();" class="btn btn-primary">Print Report</button>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-primary">
             <tr>
                 <th>Asset Name</th>
                 <th>Category</th>
@@ -36,7 +52,7 @@
                 <th>Days Until Expiry</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-light">
             @foreach($assets as $asset)
             @php
                 $warrantyExpiry = \Carbon\Carbon::parse($asset->warranty_expiry);
@@ -53,7 +69,7 @@
                 <td>{{ $warrantyExpiry->format('Y-m-d') }}</td>
                 <td>
                     @if($isExpired)
-                        <span class="badge badge-danger">Expired</span>
+                        <span class="badge bg-danger">Expired</span>
                     @else
                         {{ $daysLeft }} days
                     @endif
@@ -65,3 +81,4 @@
 </div>
 
 @endsection
+ 
